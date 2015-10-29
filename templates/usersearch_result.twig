@@ -1,0 +1,77 @@
+<h2>{{ lang.HEADING_RESULT }}</h2>
+<p>{{ lang.HOWTO_RESULT }}</p>	
+<table width="98%" cellspacing="0" border="0" cellpadding="5px" class="row_a">
+	<tr>
+		<td style="width: 220px;"><strong>{{ lang.SEARCH_DETAIL_RESULT }}:</strong></td>
+		<td><strong>&nbsp;</td>
+	</tr>
+	<tr>				
+		<td>{{ lang.SEARCH_ITEM_RESULT }}:</td>
+		<td>{{ post.BEGRIFF }}</td>		
+	</tr>
+	<tr>				
+		<td>{{ lang.SEARCH_FIELD_RESULT }}:</td>
+		<td>{{ DISPLAYSEARCHFIELD }}</td>		
+	</tr>
+	<tr>				
+		<td>{{ lang.GROUP_RESULT }}:</td>
+		<td>{{ GROUP_NAME|default(lang.IN_ALL_GROUPS) }}</td>		
+	</tr>	 
+	<tr>				
+		<td>{{ lang.LAST_LOGIN }}:</td>
+		<td>{% if post.comp_date %} {{ (post.datesearch == "after") ? lang.DATE_AFTER_RESULT : lang.DATE_BEFORE_RESULT }} {{ post.comp_date }}{% endif %}</td>		
+	</tr>
+	<tr>
+		<td colspan="2"><br /><strong>{{ lang.SHOW_RESULT }}:</strong></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+        {% if result %}
+            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-collapse: collapse;">
+                <tr style="background-color: #BDCDD9;">
+                    <td align="right" style="font-weight:bold; border: 1px solid #ccc;">ID</td>
+                    <td style="font-weight:bold; border: 1px solid #ccc;">{{ lang.USER_NAME }}</td>
+                    <td style="font-weight:bold; border: 1px solid #ccc;">{{ lang.REAL_NAME }}</td>
+                    <td style="font-weight:bold; border: 1px solid #ccc;">{{ lang.EMAIL }}</td>
+                    <td style="font-weight:bold; border: 1px solid #ccc;">{{ lang.LAST_LOGIN }}</td>
+                    <td style="font-weight:bold; border: 1px solid #ccc;">{{ lang.LAST_IP }}</td>
+                </tr>
+                {% for entry in result %}
+                <tr style="background-color: {RESULT_BGCOL}">
+                    <td align="center" style="border: 1px solid #ccc;">
+                        <form name="edituser{{ entry.USER_ID }}" method="post" action="{{ ADMIN_URL }}/users/users.php" target="_blank">
+                            <input type="hidden" name="userstatus" value="1" />
+                            {{ FTAN }}
+                            <input type="hidden" name="user_id" value="{{ entry.USER_ID_KEY }}" />
+                            <input type="hidden" name="modify" value="modify" />
+                            <b>{{ entry.USER_ID }}</b>
+                        </form>
+                    </td>
+                    <td align="left" style="border: 1px solid #ccc;">
+                        <a OnClick="javascript:if ({{ entry.USER_ID }}!=1) { document.edituser{{ entry.USER_ID }}.submit();} else {alert('administrator edition disabled for security reasons');}; return false;" HREF="#" title="{{ lang.EDIT_USER }}: {{ entry.USERNAME }}">{{ entry.USERNAME }}</a>
+                    </td>
+                    <td align="left" style="border: 1px solid #ccc;">
+                    {{ entry.DISPLAYNAME }}
+                    </td>
+                    <td align="left" style="border: 1px solid #ccc;">
+                        <a href="mailto:{{ entry.EMAIL }}">{{ entry.EMAIL }}</a>
+                    </td>
+                    <td align="left" style="border: 1px solid #ccc;">
+                    {{ entry.LASTLOGIN }}/{{ entry.DAYS_INACTIVE }}
+                    </td>
+                    <td align="left" style="border: 1px solid #ccc;">
+                    {{ entry.LAST_IP }}
+                    </td>							
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="6" style="font-size:smaller;" align="center">{{ lang.HINT_EDIT }}</td>
+                </tr>
+            </table>
+        {% else %}
+            {{ lang.NO_RESULT }}	
+        {% endif %}
+</td>
+</tr>
+</table>
+<form><input style="margin-top:10px; width:140px;" type="button" value="{{ lang.NEW_SEARCH }}" onClick="javascript:history.back();"></form>
